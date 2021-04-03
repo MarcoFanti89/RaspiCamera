@@ -40,7 +40,8 @@ if __name__ == '__main__':
             image2 = util.captureTestImage()
             difference = util.compareImages(image1, image2, threshold)
 
-            print('Sensed difference: %d' % difference)
+            #difference in % on the test image (100*75 resolution)
+            log.info('Sensed difference on %d pixels (%d%%)' % (difference, difference / 75))
         
             detectedMotion = (difference >= sensitivity)
         
@@ -57,8 +58,11 @@ if __name__ == '__main__':
                 util.takeFullPhoto(filename)
                 last_capture = datetime.datetime.now()
                 destination = base_folder + '/' + util.getDate() + subFolder + util.getTimestamp() + '.jpg'
-                util.backup_file(filename, destination)
-                log.info('Image sent to dropbox location ' + destination)
+                dropbox_result = util.backup_file(filename, destination)
+                if(dropbox_result == 'OK'):
+                    log.info('Image sent to dropbox location ' + destination)
+                else:
+                    log.error('Error uploading file to Dropbox: ' + dropbox_result)
 
             image1 = image2 #ready for next iteration!
 

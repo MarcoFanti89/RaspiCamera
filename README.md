@@ -3,7 +3,7 @@
 This python script monitors the raspberry camera, captures a photo when a change is detected and uploads it to Dropbox
 
 ## Configuration
-All the configuration is in the file `config.properties` (sorry I'm still a Java fan)
+All the configuration is in the file `config.properties`, example here:
 
 ```
 [Global]
@@ -40,6 +40,8 @@ base_folder=/raspi_camera
 ## Run the script
 
 To run this script, execute `RaspiCamera.py`
+
+These is also a utility script which you can use to backup a local file to your dropbox, look at `./copyToDropbox.py --help`
 
 ### Configure as daemon to run at startup
 Create a new systemd service file `/etc/systemd/system/raspicamera.service`

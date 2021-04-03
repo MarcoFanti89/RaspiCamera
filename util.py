@@ -1,5 +1,4 @@
 import os
-import sys
 import configparser
 import requests
 import pathlib
@@ -25,30 +24,22 @@ def read_config():
 # Capture a small test image (for motion detection)
 #returns pixel data in PixelAccess obj type
 def captureTestImage():
-##    
-    print('Capturing test image')
-    try:
-        config = read_config()
-        temp_file = config['Global'].get('local_folder') + '/temp.bmp'
-        command = "/opt/vc/bin/raspistill -w %s -h %s -e bmp -o %s" % (100, 75, temp_file)
 
-        print('Executing command ' + command)
-        
-        #imageData.write(subprocess.check_output(command, shell=True))
-        subprocess.run(command, check=True, shell=True)
-        
-        im = Image.open(temp_file)
-        pixelData = im.load()
-        return pixelData
+    config = read_config()
+    temp_file = config['Global'].get('local_folder') + '/temp.bmp'
+    command = "/opt/vc/bin/raspistill -w %s -h %s -e bmp -o %s" % (100, 75, temp_file)
 
-    except BaseException as err:
-        print('Error getting photo: ' + str(err))
-        traceback.print_exc()
-        return None
+    #imageData.write(subprocess.check_output(command, shell=True))
+    subprocess.run(command, check=True, shell=True)
+    
+    im = Image.open(temp_file)
+    pixelData = im.load()
+    return pixelData
     
 
 #returns how many pixels differs more than the threshold
 def compareImages(pixel_one, pixel_two, threshold):
+    
     changedPixels = 0
     
     for x in range(0, 100):
@@ -119,12 +110,9 @@ def backup_file(source, destination):
         return('Invalid token error: ' + str(err))
 
     with open(source, 'rb') as f:
-        print('Uploading file to Dropbox location: ' + destination)
 
         try:
             dbox.files_upload(f.read(), destination, mode=WriteMode('overwrite'))
-
-            print('File copied successfully')    
             return('OK')
             
         except BaseException as err:
